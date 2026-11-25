@@ -1,4 +1,6 @@
 name: Build apps
+permissions:
+  contents: write
 on:
   workflow_dispatch:
     inputs:
@@ -22,7 +24,7 @@ jobs:
       - run: cd android && chmod +x gradlew && ./gradlew assembleDebug
       - uses: actions/upload-artifact@v4
         with:
-          name: JEE-PYQ-Android-APK
+          name: android
           path: android/app/build/outputs/apk/debug/app-debug.apk
   desktop:
     if: ${{ inputs.desktop }}
@@ -41,8 +43,22 @@ jobs:
       - run: npm run dist
       - uses: actions/upload-artifact@v4
         with:
-          name: JEE-PYQ-${{ matrix.os }}
+          name: desktop-${{ matrix.os }}
           path: |
             dist/*.exe
             dist/*.dmg
             dist/*.AppImage
+  release:
+    needs: [android, desktop]
+    if: ${{ always() && needs.android.result == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: out
+          merge-multiple: true
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: build-${{ github.run_number }}
+          name: JEE PYQ apps (build ${{ github.run_number }})
+          files: out/*
