@@ -1,0 +1,59 @@
+{
+  "name": "jee-pyq-quiz",
+  "version": "1.0.0",
+  "description": "JEE Physics PYQ Quiz",
+  "author": "Sudhanshu <itseditingarea@gmail.com>",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --publish never"
+  },
+  "devDependencies": {
+    "@capacitor/android": "^6.1.2",
+    "@capacitor/core": "^6.1.2",
+    "@capacitor/cli": "^6.1.2",
+    "@capacitor/filesystem": "^6.0.1",
+    "@capacitor-community/file-opener": "^6.0.0",
+    "electron": "^31.0.0",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.sudhanshu.jeepyq",
+    "productName": "JEE PYQ Quiz",
+    "files": [
+      "main.js",
+      "www/**/*"
+    ],
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ],
+      "category": "public.app-category.education",
+      "identity": null
+    },
+    "linux": {
+      "target": "AppImage",
+      "category": "Education"
+    }
+  }
+}
